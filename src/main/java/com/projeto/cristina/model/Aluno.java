@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Aluno {
@@ -11,61 +12,98 @@ public class Aluno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAluno;
-    private String nomeString;
-    private int idade;
-    private String linkLinkedin;
-    private String linkGithub;
+    
+    @NotNull
+    private String nome;
+    
+    @NotNull
+    private String dt_nascimento;
+    private String linkedin;
+    private String Github;
+    
+    @NotNull
+    private String cpf;
+    @NotNull
+    private String email;
+    private String foto;
+    private String comentario;
 
     // Construtores
     public Aluno() {
     }
 
-    public Aluno(Long idAluno, String nomeString, int idade, String linkLinkedin, String linkGithub) {
-        this.idAluno = idAluno;
-        this.nomeString = nomeString;
-        this.idade = idade;
-        this.linkLinkedin = linkLinkedin;
-        this.linkGithub = linkGithub;
-    }
+	public Long getIdAluno() {
+		return idAluno;
+	}
 
-    // Getters e Setters
-    public Long getIdAluno() {
-        return idAluno;
-    }
+	public void setIdAluno(Long idAluno) {
+		this.idAluno = idAluno;
+	}
 
-    public void setIdAluno(Long idAluno) {
-        this.idAluno = idAluno;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public String getNomeString() {
-        return nomeString;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public void setNomeString(String nomeString) {
-        this.nomeString = nomeString;
-    }
+	public String getDt_nascimento() {
+		return dt_nascimento;
+	}
 
-    public int getIdade() {
-        return idade;
-    }
+	public void setDt_nascimento(String dt_nascimento) {
+		this.dt_nascimento = dt_nascimento;
+	}
 
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
+	public String getLinkedin() {
+		return linkedin;
+	}
 
-    public String getLinkLinkedin() {
-        return linkLinkedin;
-    }
+	public void setLinkedin(String linkedin) {
+		this.linkedin = linkedin;
+	}
 
-    public void setLinkLinkedin(String linkLinkedin) {
-        this.linkLinkedin = linkLinkedin;
-    }
+	public String getGithub() {
+		return Github;
+	}
 
-    public String getLinkGithub() {
-        return linkGithub;
-    }
+	public void setGithub(String github) {
+		Github = github;
+	}
 
-    public void setLinkGithub(String linkGithub) {
-        this.linkGithub = linkGithub;
-    }
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+    
+ 
+    
 }
