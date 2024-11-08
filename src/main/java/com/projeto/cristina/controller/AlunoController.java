@@ -1,5 +1,7 @@
 package com.projeto.cristina.controller;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.cristina.model.Aluno;
 import com.projeto.cristina.repository.AlunoRepository;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/alunos")
 public class AlunoController {
@@ -20,10 +23,46 @@ public class AlunoController {
     private AlunoRepository alunoRepository;
 
     @Operation(summary = "Adiciona um aluno", method = "POST")
-    @PostMapping
-    public ResponseEntity<Aluno> cadastrarAluno(@RequestBody Aluno aluno) {
-        Aluno alunoSalvo = alunoRepository.save(aluno);
-        return new ResponseEntity<>(alunoSalvo, HttpStatus.CREATED);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Aluno> cadastrarAluno(
+            @RequestParam("nome") String nome,
+            @RequestParam("cpf") Long cpf,
+            @RequestParam("dataNascimento") String dataNascimento,
+            @RequestParam(value = "github", required = false) String github,
+            @RequestParam(value = "linkedin", required = false) String linkedin,
+            @RequestParam("email") String email,
+            @RequestParam("senha") String senha,
+            @RequestParam(value = "foto", required = false) MultipartFile foto,
+            @RequestParam(value = "comentario", required = false) String comentario
+    ) {
+        try {
+            Aluno aluno = new Aluno();
+            aluno.setNome(nome);
+            aluno.setCpf(cpf);
+            aluno.setDataNascimento(dataNascimento);
+            aluno.setGithub(github);
+            aluno.setLinkedin(linkedin);
+            aluno.setEmail(email);
+            aluno.setSenha(senha);
+            aluno.setComentario(comentario);
+
+            // Verifica se há uma foto e, se sim, armazena em bytes
+            if (foto != null && !foto.isEmpty()) {
+                aluno.setFoto(foto.getBytes());
+            }
+
+            Aluno alunoSalvo = alunoRepository.save(aluno);
+            return new ResponseEntity<>(alunoSalvo, HttpStatus.CREATED);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @Operation(summary = "Lista todos os alunos", method = "GET")
+    @GetMapping
+    public ResponseEntity<List<Aluno>> listarAlunos() {
+        List<Aluno> alunos = alunoRepository.findAll();
+        return new ResponseEntity<>(alunos, HttpStatus.OK);
     }
 
     @Operation(summary = "Retorna um aluno específico", method = "GET")
