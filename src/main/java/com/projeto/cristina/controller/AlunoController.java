@@ -7,6 +7,7 @@ import java.util.Optional;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,16 +74,48 @@ public class AlunoController {
     }
 
     @Operation(summary = "Atualiza os dados de um aluno", method = "PUT")
-    @PutMapping("/{id}")
-    public ResponseEntity<Aluno> atualizarAluno(@PathVariable Long id, @RequestBody Aluno aluno) {
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Aluno> atualizarAluno(
+            @PathVariable Long id,
+            @RequestParam("nome") String nome,
+            @RequestParam("cpf") Long cpf,
+            @RequestParam("dataNascimento") String dataNascimento,
+            @RequestParam(value = "github", required = false) String github,
+            @RequestParam(value = "linkedin", required = false) String linkedin,
+            @RequestParam("email") String email,
+            @RequestParam(value = "senha", required = false) String senha,
+            @RequestParam(value = "foto", required = false) MultipartFile foto) {
+
         Optional<Aluno> alunoExistente = alunoRepository.findById(id);
         if (alunoExistente.isPresent()) {
-            aluno.setIdAluno(id);
+            Aluno aluno = alunoExistente.get();
+            aluno.setNome(nome);
+            aluno.setCpf(cpf);
+            aluno.setDataNascimento(dataNascimento);
+            aluno.setGithub(github);
+            aluno.setLinkedin(linkedin);
+            aluno.setEmail(email);
+
+            if (senha != null) {
+                aluno.setSenha(senha);
+            }
+
+            if (foto != null && !foto.isEmpty()) {
+                try {
+                    byte[] fotoBytes = foto.getBytes();
+                    aluno.setFoto(fotoBytes);
+                } catch (IOException e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(null);
+                }
+            }
+
             Aluno alunoAtualizado = alunoRepository.save(aluno);
             return new ResponseEntity<>(alunoAtualizado, HttpStatus.OK);
         }
         return ResponseEntity.notFound().build();
     }
+
 
     @Operation(summary = "Exclui um aluno específico", method = "DELETE")
     @DeleteMapping("/{id}")
