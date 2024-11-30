@@ -14,13 +14,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/funcionarios")
-public class FuncionarioController {
+public class FuncionarioController implements IController<Funcionario>{
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
     @PostMapping
-    public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody Funcionario funcionario) {
+    @Override
+    public ResponseEntity<Funcionario> create(@RequestBody Funcionario funcionario) {
         Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
         return new ResponseEntity<>(funcionarioSalvo, HttpStatus.CREATED);
     }
@@ -28,21 +29,24 @@ public class FuncionarioController {
 
     @Operation(summary = "Lista todos os funcionários", method = "GET")
     @GetMapping
-    public ResponseEntity<List<Funcionario>> listarFuncionarios() {
+    @Override
+    public ResponseEntity<List<Funcionario>> list() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
         return new ResponseEntity<>(funcionarios, HttpStatus.OK);
     }
 
     @Operation(summary = "Retorna um funcionário específico", method = "GET")
     @GetMapping("/{id}")
-    public ResponseEntity<Funcionario> buscarFuncionario(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Funcionario> getById(@PathVariable Long id) {
         Optional<Funcionario> funcionario = funcionarioRepository.findById(id);
         return funcionario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Atualiza os dados de um funcionário", method = "PUT")
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> atualizarFuncionario(
+    @Override
+    public ResponseEntity<Funcionario> update(
             @PathVariable Long id,
             @RequestBody Funcionario funcionarioAtualizado) {
 
@@ -63,7 +67,8 @@ public class FuncionarioController {
 
     @Operation(summary = "Exclui um funcionário específico", method = "DELETE")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirFuncionario(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (funcionarioRepository.findById(id).isPresent()) {
             funcionarioRepository.deleteById(id);
             return ResponseEntity.noContent().build();
