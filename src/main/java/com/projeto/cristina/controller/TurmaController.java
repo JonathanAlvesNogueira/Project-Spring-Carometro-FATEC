@@ -14,21 +14,23 @@ import com.projeto.cristina.repository.TurmaRepository;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/turmas")
-public class TurmaController {
+public class TurmaController implements IController<Turma>{
 
     @Autowired
     private TurmaRepository turmaRepository;
 
     @Operation(summary = "Adiciona uma turma", method = "POST")
     @PostMapping
-    public ResponseEntity<Turma> criarTurma(@RequestBody Turma turma) {
+    @Override
+    public ResponseEntity<Turma> create(@RequestBody Turma turma) {
         Turma novaTurma = turmaRepository.save(turma);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaTurma);
     }
 
     @Operation(summary = "Retorna uma turma específica", method = "GET")
     @GetMapping("/{id}")
-    public ResponseEntity<Turma> buscarTurmaPorId(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Turma> getById(@PathVariable Long id) {
         return turmaRepository.findById(id)
             .map(turma -> ResponseEntity.ok().body(turma))
             .orElse(ResponseEntity.notFound().build());
@@ -36,12 +38,15 @@ public class TurmaController {
 
     @Operation(summary = "Atualiza os dados de uma turma", method = "PUT")
     @GetMapping
-    public List<Turma> listarTodasAsTurmas() {
-        return turmaRepository.findAll();
+    @Override
+    public ResponseEntity<List<Turma>> list() {
+    	List<Turma> turmas = turmaRepository.findAll();
+    	return new ResponseEntity<>(turmas, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Turma> atualizarTurma(@PathVariable Long id, @RequestBody Turma turmaAtualizada) {
+    @Override
+    public ResponseEntity<Turma> update(@PathVariable Long id, @RequestBody Turma turmaAtualizada) {
         return turmaRepository.findById(id)
             .map(turma -> {
                 turma.setNomeTurma(turmaAtualizada.getNomeTurma());
@@ -55,12 +60,12 @@ public class TurmaController {
 
     @Operation(summary = "Exclui uma turma específica", method = "DELETE")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarTurma(@PathVariable Long id) {
-        return turmaRepository.findById(id)
-            .map(turma -> {
-                turmaRepository.delete(turma);
-                return ResponseEntity.noContent().build();
-            })
-            .orElse(ResponseEntity.notFound().build());
+    @Override
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    	if (turmaRepository.existsById(id)) {
+            turmaRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
