@@ -1,9 +1,6 @@
 package com.projeto.cristina.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -17,15 +14,18 @@ public class Aluno {
     private String nome;
     
     @NotNull
-    private String dt_nascimento;
+    private String dataNascimento;
     private String linkedin;
     private String Github;
     
     @NotNull
-    private String cpf;
+    private Long cpf;
     @NotNull
     private String email;
-    private String foto;
+	@NotNull
+	private String senha;
+	@Lob
+    private byte[] foto;
     private String comentario;
 
     // Construtores
@@ -48,12 +48,12 @@ public class Aluno {
 		this.nome = nome;
 	}
 
-	public String getDt_nascimento() {
-		return dt_nascimento;
+	public String getDataNascimento() {
+		return dataNascimento;
 	}
 
-	public void setDt_nascimento(String dt_nascimento) {
-		this.dt_nascimento = dt_nascimento;
+	public void setDataNascimento(String dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public String getLinkedin() {
@@ -72,11 +72,11 @@ public class Aluno {
 		Github = github;
 	}
 
-	public String getCpf() {
+	public Long getCpf() {
 		return cpf;
 	}
 
-	public void setCpf(String cpf) {
+	public void setCpf(Long cpf) {
 		this.cpf = cpf;
 	}
 
@@ -88,11 +88,19 @@ public class Aluno {
 		this.email = email;
 	}
 
-	public String getFoto() {
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public byte[] getFoto() {
 		return foto;
 	}
 
-	public void setFoto(String foto) {
+	public void setFoto(byte[] foto) {
 		this.foto = foto;
 	}
 
