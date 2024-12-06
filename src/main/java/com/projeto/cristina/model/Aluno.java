@@ -1,5 +1,7 @@
 package com.projeto.cristina.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -8,7 +10,7 @@ public class Aluno {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAluno;
+    private Long id;
     
     @NotNull
     private String nome;
@@ -28,16 +30,21 @@ public class Aluno {
     private byte[] foto;
     private String comentario;
 
+	@JsonManagedReference
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "turma_id")
+	private Turma turma;
+
     // Construtores
     public Aluno() {
     }
 
-	public Long getIdAluno() {
-		return idAluno;
+	public Long getId() {
+		return id;
 	}
 
-	public void setIdAluno(Long idAluno) {
-		this.idAluno = idAluno;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -111,7 +118,12 @@ public class Aluno {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
-    
- 
-    
+
+	public Turma getTurma() {
+		return turma;
+	}
+
+	public void setTurma(Turma turma) {
+		this.turma = turma;
+	}
 }

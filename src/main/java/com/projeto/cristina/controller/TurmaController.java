@@ -36,7 +36,8 @@ public class TurmaController implements IController<Turma>{
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Atualiza os dados de uma turma", method = "PUT")
+
+    @Operation(summary = "Lista todas as turmas", method = "GET")
     @GetMapping
     @Override
     public ResponseEntity<List<Turma>> list() {
@@ -44,6 +45,7 @@ public class TurmaController implements IController<Turma>{
     	return new ResponseEntity<>(turmas, HttpStatus.OK);
     }
 
+    @Operation(summary = "Atualiza os dados de uma turma", method = "PUT")
     @PutMapping("/{id}")
     @Override
     public ResponseEntity<Turma> update(@PathVariable Long id, @RequestBody Turma turmaAtualizada) {

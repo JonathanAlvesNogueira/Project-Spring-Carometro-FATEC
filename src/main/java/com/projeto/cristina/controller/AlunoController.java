@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.projeto.cristina.model.Turma;
+import com.projeto.cristina.repository.TurmaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,11 @@ public class AlunoController {
     @Autowired
     private AlunoRepository alunoRepository;
 
+    @Autowired
+    private TurmaRepository turmaRepository;
+
     @Operation(summary = "Adiciona um aluno", method = "POST")
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public ResponseEntity<Aluno> cadastrarAluno(
             @RequestParam("nome") String nome,
             @RequestParam("cpf") Long cpf,
@@ -34,7 +39,8 @@ public class AlunoController {
             @RequestParam("email") String email,
             @RequestParam("senha") String senha,
             @RequestParam(value = "foto", required = false) MultipartFile foto,
-            @RequestParam(value = "comentario", required = false) String comentario
+            @RequestParam(value = "comentario", required = false) String comentario,
+            @RequestParam(value = "turmaId", required = false) Long turmaId
     ) {
         try {
             Aluno aluno = new Aluno();
@@ -46,6 +52,13 @@ public class AlunoController {
             aluno.setEmail(email);
             aluno.setSenha(senha);
             aluno.setComentario(comentario);
+
+            if (turmaId != null) {
+                Turma turma = turmaRepository.findById(turmaId).orElse(null);
+                if (turma != null) {
+                    aluno.setTurma(turma);
+                }
+            }
 
             // Verifica se há uma foto e, se sim, armazena em bytes
             if (foto != null && !foto.isEmpty()) {

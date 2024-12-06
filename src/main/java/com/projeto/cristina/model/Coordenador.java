@@ -17,6 +17,10 @@ public class Coordenador {
 	private String funcional;
 	private String dataInicio;
 	private String dataFim;
+
+	public Coordenador() {
+
+	}
 	
 	public Coordenador(String nome, String funcional, String dataInicio, String dataFim) {
 		super();
@@ -25,7 +29,14 @@ public class Coordenador {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getNome() {
 		return nome;

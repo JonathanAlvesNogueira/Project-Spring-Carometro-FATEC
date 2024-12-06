@@ -8,7 +8,7 @@ public class Funcionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idFunc;
+    private Long id;
 
     @NotNull
     private String nome;
@@ -19,12 +19,12 @@ public class Funcionario {
     public Funcionario() {
     }
 
-    public Long getIdFunc() {
-        return idFunc;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdFunc(Long idFunc) {
-        this.idFunc = idFunc;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {

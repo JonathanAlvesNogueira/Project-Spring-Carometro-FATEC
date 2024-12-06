@@ -19,6 +19,7 @@ public class FuncionarioController implements IController<Funcionario>{
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
+    @Operation(summary = "Adiciona um funcionário", method = "POST")
     @PostMapping
     @Override
     public ResponseEntity<Funcionario> create(@RequestBody Funcionario funcionario) {

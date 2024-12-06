@@ -76,8 +76,9 @@ public class CursoController implements IController<Curso>{
         if (cursoRepository.existsById(id)) {
             cursoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Lista todos os cursos", method = "GET")
