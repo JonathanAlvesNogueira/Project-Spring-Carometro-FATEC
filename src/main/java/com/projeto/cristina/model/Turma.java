@@ -18,7 +18,9 @@ public class Turma {
 
 	private String periodo;
 
-    @ManyToOne
+	@JsonBackReference
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "curso_id")
     private Curso curso;
 
 	@JsonBackReference

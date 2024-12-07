@@ -1,10 +1,14 @@
 package com.projeto.cristina.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class Coordenador {
 
@@ -18,17 +22,10 @@ public class Coordenador {
 	private String dataInicio;
 	private String dataFim;
 
-	public Coordenador() {
-
-	}
-	
-	public Coordenador(String nome, String funcional, String dataInicio, String dataFim) {
-		super();
-		this.nome = nome;
-		this.funcional = funcional;
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-	}
+	@JsonBackReference
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "curso_id")
+	private Curso curso;
 
 	public Long getId() {
 		return id;

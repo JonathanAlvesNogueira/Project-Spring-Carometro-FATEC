@@ -1,8 +1,16 @@
 package com.projeto.cristina.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class Curso {
 
@@ -14,12 +22,16 @@ public class Curso {
     private String codigoCurso;
     private int duracaoEmSemestres;
     private String departamento;
-    private String coordenador;
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = false)
+    private Coordenador coordenador;
     private int numeroDeVagas;
     private String turno;
     private String modalidade;
 
-    @OneToMany(mappedBy = "curso")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Turma> turmas;
 
     // Getters e Setters
@@ -64,11 +76,11 @@ public class Curso {
         this.departamento = departamento;
     }
 
-    public String getCoordenador() {
+    public Coordenador getCoordenador() {
         return coordenador;
     }
 
-    public void setCoordenador(String coordenador) {
+    public void setCoordenador(Coordenador coordenador) {
         this.coordenador = coordenador;
     }
 
